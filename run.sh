@@ -3,6 +3,9 @@ mkdir books2
 mkdir books3
 mkdir books4
 chmod +x download.sh
+chmod +x mapper.sh
+chmod +x reducer.sh
+chmod +x sequential.sh
 
 cd books1
 ../downloads.sh
