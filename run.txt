@@ -1,0 +1,19 @@
+# wget <url> && chmod mpr.sh && ./mpr.sh
+
+mkdir books
+touch download.sh
+echo "#!/bin/bash" >> download.sh
+echo "for i in {1300..1400}" >> download.sh
+echo "do" >> download.sh
+echo "wget \"http://www.gutenberg.org/files/\$i/\$i.txt\"" >> download.sh
+echo "wget \"http://www.gutenberg.org/files/\$i/\$i-0.txt\"" >> download.sh
+echo "done" >> download.sh
+chmod +x download.sh
+cd books
+../downloads.sh
+hdfs dfs -mkdir books-input
+hdfs dfs -put *.txt books-input
+time hadoop jar /usr/lib/hadoop/hadoop-streaming.jar -files mapper.py,reducer.py -mapper mapper.py -reducer reducer.py -input books-input -output books-output
+wget <url_seq>
+chmod +x ./mpr_sequential.py
+time ./mpr_sequential.py
