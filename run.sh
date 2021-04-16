@@ -28,7 +28,7 @@ do
 cd books$i
 hdfs dfs -mkdir books-input$i
 hdfs dfs -put *.txt* books-input$i
-time python3 ../sequential.py >> result.txt
+time python3 ../sequential.py >> ../result$i.txt
 cd ..
 time hadoop jar /usr/lib/hadoop/hadoop-streaming.jar -files mapper.py,reducer.py -mapper mapper.py -reducer reducer.py -input books-input$i -output books-output$i
 done
