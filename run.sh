@@ -29,6 +29,7 @@ problem_sizes=("100MB" "500MB" "1GB")
 
 for i in {0..2}
 do
+    echo "$1,$2,${problem_sizes[$i]}"
     cd books$i
     hdfs dfs -rm -r books-input$i
     hdfs dfs -mkdir books-input$i
@@ -36,6 +37,7 @@ do
     
     for iteration in {1..3}
     do
+        echo "seq$iteration"
         echo -n "$1,$2,${problem_sizes[$i]}," >> ../measurements_seq.txt
         (time python3 ../sequential.py >> ../result$i.txt) 2>&1 >/dev/null | grep 'real' | awk '{ print $2 }' >> ../measurements_seq.txt
         rm ../result$i.txt
@@ -45,8 +47,9 @@ do
 
     for iteration in {1..3}
     do
+        echo "par$iteration"
         hdfs dfs -rm -r books-output$i
         echo -n "$1,$2,${problem_sizes[$i]}," >> ./measurements_par.txt
-        (time hadoop jar /usr/lib/hadoop/hadoop-streaming.jar -files mapper.py,reducer.py -mapper mapper.py -reducer reducer.py -input books-input$i -output books-output$i) 2>&1 >./debug$i$iteration | grep 'real' | awk '{ print $2 }' >> ./measurements_par.txt
+        (time hadoop jar /usr/lib/hadoop/hadoop-streaming.jar -files mapper.py,reducer.py -mapper mapper.py -reducer reducer.py -input books-input$i -output books-output$i) 2>&1 >/dev/null | grep 'real' | awk '{ print $2 }' >> ./measurements_par.txt
     done
 done
