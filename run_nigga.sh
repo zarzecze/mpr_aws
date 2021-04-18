@@ -1,4 +1,4 @@
-# How to run:
+# How to run
 # nohup run_nigga.sh
 
 sudo yum install git -y
@@ -13,6 +13,8 @@ cluster_id=`aws emr list-clusters --active | jq -r '.Clusters[0].Id'`
 instance_type=`aws emr describe-cluster --cluster-id ${cluster_id} | jq -r ".Cluster.InstanceGroups[0].InstanceType"`
 num_instances=$((`aws emr describe-cluster --cluster-id ${cluster_id} | jq -r ".Cluster.InstanceGroups[0].RunningInstanceCount"` + 1))
 instance_id=`aws emr describe-cluster --cluster-id ${cluster_id} | jq -r ".Cluster.InstanceGroups[0].Id"`
+
+bucket_name=`echo ${cluster_id} | awk '{print tolower($0)}'`
 
 
 cd mpr_aws
@@ -44,7 +46,7 @@ for i_sizes in "${instances_to_request[@]}"; do
 
 done
 
-aws s3api create-bucket --bucket $cluster_id
+aws s3api create-bucket --bucket ${bucket_name}
 
-aws s3 cp measurements_seq.txt s3://${cluster_id}/measurements_seq.txt
-aws s3 cp measurements_par.txt s3://${cluster_id}/measurements_par.txt
+aws s3 cp measurements_seq.txt s3://$bucket_name/measurements_seq.txt
+aws s3 cp measurements_par.txt s3://$bucket_name/measurements_par.txt
