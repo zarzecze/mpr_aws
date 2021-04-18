@@ -19,7 +19,7 @@ cd mpr_aws
 chmod +x run.sh
 
 
-instances_to_request=(3 5 8)
+instances_to_request=(2 4 7)
 
 for i_sizes in "${instances_to_request[@]}"; do
 
