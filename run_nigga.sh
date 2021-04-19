@@ -26,7 +26,7 @@ instances_to_request=(2 4 7)
 
 for i_sizes in "${instances_to_request[@]}"; do
 
-        aws emr modify-instance-groups --cluster-id ${cluster_id} --instance-groups '[{"InstanceGroupId": "'${instance_id}'", "InstanceCount": '${i_sizes}'}]'
+        aws emr modify-instance-groups --cluster-id ${cluster_id} --instance-groups '[{"InstanceGroupId": '${instance_id}', "InstanceCount": '${i_sizes}'}]'
 
         requested_instances=$((`aws emr describe-cluster --cluster-id ${cluster_id} | jq '.Cluster.InstanceGroups | .[] | select(.InstanceGroupType=="CORE") | .RequestedInstanceCount'` + 1))
 
